@@ -1,0 +1,22 @@
+# Myelovar demo: `docker compose up --build`
+# Serves the precomputed A/B demo bundles + validation + manifest on :8000.
+# No .env required — copy .env.example to .env only to override defaults.
+services:
+  myelovar:
+    build: .
+    image: myelovar:demo
+    ports:
+      - "${MYELOVAR_PORT:-8000}:8000"
+    environment:
+      MYELOVAR_DATA_DIR: /app/data
+      MYELOVAR_OUTPUTS_DIR: /app/outputs
+      MYELOVAR_MAX_UPLOAD_MB: "${MYELOVAR_MAX_UPLOAD_MB:-50}"
+      MYELOVAR_CORS_ORIGINS: "${MYELOVAR_CORS_ORIGINS:-*}"
+      MYELOVAR_STORE_UPLOADS: "${MYELOVAR_STORE_UPLOADS:-false}"
+    volumes:
+      # Optional live-run support: point these at real data/outputs to enable
+      # POST /api/runs inside the container (demo UI works without them).
+      - ${MYELOVAR_DATA_HOST:-./data}:/app/data:ro
+      - ${MYELOVAR_OUTPUTS_HOST:-./outputs}:/app/outputs
+      - ${MYELOVAR_UPLOADS_HOST:-./outputs/uploads}:/app/outputs/uploads
+    restart: unless-stopped

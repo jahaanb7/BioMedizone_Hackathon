@@ -1,0 +1,13 @@
+.git
+.venv
+node_modules
+__pycache__
+*.pyc
+.pytest_cache
+data            # 4.9G of bulk genomics data — mount instead of baking in
+outputs         # 806M of run outputs — mount for live runs
+logs
+web/node_modules
+web/src
+tests
+validation/figures/*.tmp

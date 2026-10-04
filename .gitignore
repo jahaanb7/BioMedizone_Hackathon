@@ -1,0 +1,19 @@
+# environments / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.env
+
+# bulk data + generated artifacts (rebuild with `make data` / `make run`)
+data/
+outputs/
+logs/
+demo_bundle/
+web/dist/
+
+# editors / OS
+.DS_Store
+.idea/
+.vscode/

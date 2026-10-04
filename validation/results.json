@@ -1,0 +1,204 @@
+{
+ "generated_at": "2026-10-04T11:43:58.504519+00:00",
+ "mode_a": {
+  "run_id": "a3bf935c0608",
+  "total_ranked": 48113,
+  "elapsed_seconds": 229.955,
+  "manifest_hash": "62ead693212ebba9",
+  "funnel": [
+   {
+    "step": "s0",
+    "label": "Load input",
+    "rows_in": 3935734,
+    "rows_out": 3935734,
+    "removed": 0,
+    "removed_reasons": {},
+    "note": "Mode A VCF HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz (3935734 variant rows)"
+   },
+   {
+    "step": "s1",
+    "label": "Annotate + filter (quality, blacklist, common, coding)",
+    "rows_in": 3935734,
+    "rows_out": 1137368,
+    "removed": 2798366,
+    "removed_reasons": {
+     "dp_lt_10": 474,
+     "variant_gt_50bp": 72,
+     "blacklisted_region": 7753,
+     "common_variant": 2782756,
+     "coding_variant": 7311
+    },
+    "note": ""
+   },
+   {
+    "step": "s2",
+    "label": "Active regulatory element overlap",
+    "rows_in": 1137368,
+    "rows_out": 48113,
+    "removed": 1089255,
+    "removed_reasons": {
+     "no_active_overlap": 1089255
+    },
+    "note": "18 tracks; context score = accessibility=0.3, h3k27ac=0.25, h3k4me1=0.1, h3k4me3=0.1, super_enhancer=0.15, tf_peak=0.1"
+   },
+   {
+    "step": "s3",
+    "label": "Motif disruption scan",
+    "rows_in": 48113,
+    "rows_out": 48113,
+    "removed": 0,
+    "removed_reasons": {},
+    "note": "scanned 48113; broken=169, created=140; 10 PWMs; REF mismatches=0"
+   },
+   {
+    "step": "s4",
+    "label": "Enhancer-to-gene linking",
+    "rows_in": 48113,
+    "rows_out": 48113,
+    "removed": 0,
+    "removed_reasons": {},
+    "note": "ABC biosample=['B_cell-ENCODE', 'GM12878-Roadmap'] proxy=True; primary links: ABC=357, distance=46030, nearest-fallback=2083"
+   },
+   {
+    "step": "s5",
+    "label": "Myeloma relevance",
+    "rows_in": 48113,
+    "rows_out": 48113,
+    "removed": 0,
+    "removed_reasons": {},
+    "note": "components: depmap=0.4, known_gene=0.3, gwas=0.15; 37 GWAS loci"
+   },
+   {
+    "step": "s6",
+    "label": "Score, rank, explain",
+    "rows_in": 48113,
+    "rows_out": 48113,
+    "removed": 0,
+    "removed_reasons": {},
+    "note": "weights={regulatory_context: 0.25, motif_disruption: 0.20, link: 0.20, myeloma_relevance: 0.25, gwas: 0.10}; top-50 Jaccard mean=0.45"
+   }
+  ],
+  "sensitivity": {
+   "n_perturbations": 60,
+   "top_n": 50,
+   "jaccard_mean": 0.44740930194339623,
+   "jaccard_min": 0.14942528735632185,
+   "spearman_mean": 0.9756469814901716,
+   "weight_scheme": "each weight perturbed +/-50% then renormalised; Spearman computed on a 48113-row subsample"
+  },
+  "motif_note": "scanned 48113; broken=169, created=140; 10 PWMs; REF mismatches=0",
+  "warnings": [
+   "ABC predictions use biosample ['B_cell-ENCODE', 'GM12878-Roadmap'] as a labelled proxy (no plasma-cell biosample in Nasser et al. 2021)"
+  ]
+ },
+ "enrichment_tests": [
+  {
+   "test": "top1000_vs_rest__inside_ENCODE_SCREEN_cCRE",
+   "contingency": {
+    "top_in": 805,
+    "top_out": 195,
+    "rest_in": 24364,
+    "rest_out": 22749
+   },
+   "odds_ratio": 3.85456158518874,
+   "p_value": 1.6303338786216763e-78,
+   "alternative": "greater",
+   "independent_of_scoring": true,
+   "note": "cCRE membership is annotated for display but is not a component of any score; peaks (not cCREs) drive selection."
+  },
+  {
+   "test": "top500_linked_genes_vs_rest__known_myeloma_genes",
+   "contingency": {
+    "top_known": 30,
+    "top_other": 1741,
+    "rest_known": 151,
+    "rest_other": 47854
+   },
+   "known_gene_pool_size": 181,
+   "odds_ratio": 5.460894439140176,
+   "p_value": 2.3864287767393492e-12,
+   "alternative": "greater",
+   "independent_of_scoring": false,
+   "note": "PARTIALLY CIRCULAR: myeloma-relevance (weight 0.25) uses known-gene/DepMap flags; gene LINKAGE itself (s4) does not."
+  },
+  {
+   "test": "mode_b_published_lead_in_top3",
+   "n_loci": 8,
+   "k": 3,
+   "recovered": 1,
+   "recovery_rate": 0.125,
+   "expected_rate_random_ranking": 0.0008805076875070414,
+   "p_value": 0.007022391460472924,
+   "independent_of_scoring": true,
+   "note": "all candidates in a locus share the same GWAS flag, so the GWAS component cannot favour the lead SNP",
+   "contingency": null
+  }
+ ],
+ "mode_b": {
+  "test": "mode_b_published_lead_in_top3",
+  "n_loci": 8,
+  "k": 3,
+  "recovered": 1,
+  "recovery_rate": 0.125,
+  "expected_rate_random_ranking": 0.0008805076875070414,
+  "p_value": 0.007022391460472924,
+  "independent_of_scoring": true,
+  "note": "all candidates in a locus share the same GWAS flag, so the GWAS component cannot favour the lead SNP",
+  "per_locus": [
+   {
+    "locus_id": "L11",
+    "n_candidates": 3301,
+    "lead_rank": 5,
+    "recovered_at_k": false
+   },
+   {
+    "locus_id": "L17",
+    "n_candidates": 16472,
+    "lead_rank": 6443,
+    "recovered_at_k": false
+   },
+   {
+    "locus_id": "L2",
+    "n_candidates": 10774,
+    "lead_rank": 60,
+    "recovered_at_k": false
+   },
+   {
+    "locus_id": "L21",
+    "n_candidates": 13080,
+    "lead_rank": 3937,
+    "recovered_at_k": false
+   },
+   {
+    "locus_id": "L3",
+    "n_candidates": 1937,
+    "lead_rank": 78,
+    "recovered_at_k": false
+   },
+   {
+    "locus_id": "L33",
+    "n_candidates": 893,
+    "lead_rank": 1,
+    "recovered_at_k": true
+   },
+   {
+    "locus_id": "L37",
+    "n_candidates": 18960,
+    "lead_rank": 10379,
+    "recovered_at_k": false
+   },
+   {
+    "locus_id": "L4",
+    "n_candidates": 7919,
+    "lead_rank": 171,
+    "recovered_at_k": false
+   }
+  ]
+ },
+ "figures": [
+  "fig_enrichment.png",
+  "fig_funnel.png",
+  "fig_mode_b_lead_ranks.png",
+  "fig_score_hist.png"
+ ]
+}

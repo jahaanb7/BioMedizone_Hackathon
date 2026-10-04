@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "myelovar"
+version = "0.1.0"
+description = "Myeloma-specific regulatory variant prioritization pipeline (research use only, not a diagnostic)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Myelovar contributors" }]
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "pyarrow>=14",
+    "pysam>=0.22",
+    "pyfaidx>=0.7",
+    "pyBigWig>=0.3.22",
+    "scipy>=1.10",
+    "pydantic>=2.5",
+    "pyyaml>=6.0",
+    "requests>=2.31",
+    "typer>=0.12",
+    "pyliftover>=0.4",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+api = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "httpx>=0.27", "python-multipart>=0.0.9"]
+test = ["pytest>=8.0", "httpx>=0.27"]
+
+[project.scripts]
+myelovar = "myelovar.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

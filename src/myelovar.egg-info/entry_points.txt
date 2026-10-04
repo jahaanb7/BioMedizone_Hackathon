@@ -1,0 +1,2 @@
+[console_scripts]
+myelovar = myelovar.cli:app

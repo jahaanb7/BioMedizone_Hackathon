@@ -1,0 +1,72 @@
+# Myelovar configuration. All thresholds and weights live here;
+# the core reads configuration only from this file or function arguments.
+
+mode: A            # default mode: A (genome funnel) or B (GWAS loci)
+input: null        # path to input VCF (Mode A) or null for built-in demo inputs
+
+paths:
+  data_dir: data
+  outputs_dir: outputs
+  cache_dir: data/cache
+  demo_dir: demo_bundle
+  manifest: data/data_manifest.json
+  track_registry: data/tracks/tracks.json
+
+filter:
+  min_dp: 10                 # DP threshold (skipped with warning if FORMAT lacks DP)
+  min_gq: 20                 # GQ threshold (skipped with warning if FORMAT lacks GQ)
+  max_af: 0.01               # common-variant cutoff, Mode A only; missing AF = keep
+  remove_common: true        # disabled automatically in Mode B
+  autosomes_only: true
+
+motif:
+  window: 30                 # bp of reference context on each side of the variant
+  min_strong: 0.80           # stronger allele must reach >=80% of PWM max score
+  min_drop: 0.20             # ...and lose >=20 percentage points, to be flagged
+
+link:
+  distance_kb: 100           # distance-fallback TSS window (kb)
+  decay_scale_kb: 10         # distance decay scale (kb)
+
+regulatory_context_weights:  # combined into regulatory_context_score (0-1)
+  accessibility: 0.30        # DNase-seq / ATAC-seq
+  h3k27ac: 0.25
+  h3k4me1: 0.10
+  h3k4me3: 0.10
+  super_enhancer: 0.15
+  tf_peak: 0.10
+
+myeloma_relevance_weights:
+  depmap: 0.40
+  known_gene: 0.30
+  expressed: 0.15
+  gwas: 0.15
+
+score_weights:
+  regulatory_context: 0.25
+  motif_disruption: 0.20
+  link: 0.20
+  myeloma_relevance: 0.25
+  gwas: 0.10
+
+depmap:
+  mm_effect_threshold: -0.5   # mean Chronos gene effect in myeloma lines
+  selectivity_margin: 0.30    # ...at least this much stronger than other lines
+  expressed_pct_threshold: 50 # expressed if TPM>1 in >=50% of myeloma lines
+
+gwas:
+  window_kb: 50               # +/- window around lead SNPs (Mode B)
+  ld_r2: 0.6                  # LD proxy threshold
+  population: "1000GENOMES:phase_3:EUR"
+  efo_trait_query: "multiple myeloma"
+
+api:
+  max_upload_mb: 50
+  cors_origins: "*"
+  host: "127.0.0.1"
+  port: 8000
+
+runtime:
+  random_seed: 1729
+  sensitivity_perturbations: 60
+  max_explained_rows: 5000    # rows carried in PipelineResult JSON (full CSV on disk)
